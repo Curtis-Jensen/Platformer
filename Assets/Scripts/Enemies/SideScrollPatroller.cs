@@ -31,7 +31,10 @@ public class SideScrollPatroller : MonoBehaviour
     private void Update()
     {
         // Check for edge detection ahead
-        if (!IsGroundAheadOfEdge())
+        bool hasGroundAhead = IsGroundAheadOfEdge();
+        Debug.Log($"[{gameObject.name}] Ground ahead: {hasGroundAhead}, Direction: {currentDirection}");
+        
+        if (!hasGroundAhead)
         {
             TurnAround();
         }
@@ -61,6 +64,8 @@ public class SideScrollPatroller : MonoBehaviour
         Vector2 rayStart = new Vector2(checkX, checkY);
         RaycastHit2D hit = Physics2D.Raycast(rayStart, Vector2.down, edgeDetectionDistance);
 
+        Debug.Log($"[{gameObject.name}] Raycast from ({rayStart.x:F2}, {rayStart.y:F2}) down {edgeDetectionDistance} units. Hit: {hit.collider?.gameObject.name ?? "NOTHING"}");
+
         // Ground exists if we hit something
         return hit.collider != null;
     }
@@ -68,5 +73,6 @@ public class SideScrollPatroller : MonoBehaviour
     private void TurnAround()
     {
         currentDirection *= -1f;
+        Debug.Log($"[{gameObject.name}] TURNED AROUND! New direction: {currentDirection}");
     }
 }

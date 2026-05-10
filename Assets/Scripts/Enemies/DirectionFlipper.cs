@@ -1,54 +1,51 @@
 using UnityEngine;
 
-/// <summary>
-/// Flips a sprite based on the horizontal velocity of a Rigidbody2D.
-/// Generic and reusable for any 2D entity that moves side-to-side.
-/// </summary>
+[RequireComponent(typeof(SpriteRenderer))]
 public class DirectionFlipper : MonoBehaviour
 {
-    [SerializeField] private float velocityThreshold = 0.1f;
+    [Tooltip("The minimum distance traveled to register a direction change")]
+    public float movementThreshold = 0.01f;
+    public bool initiallyFacingRight;
 
-    private Rigidbody2D rb;
+    private Vector3 previousPosition;
     private SpriteRenderer spriteRenderer;
     private bool facingRight = true;
 
-    private void Start()
+    void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        previousPosition = transform.position;
+        facingRight = initiallyFacingRight;
+    }
 
-        if (rb == null)
+    void LateUpdate()
+    {
+        // Calculate movement direction
+        Vector3 movementDelta = transform.position - previousPosition;
+        
+        // Only process if there's significant movement
+        if (movementDelta.magnitude > movementThreshold)
         {
-            Debug.LogError("DirectionFlipper requires a Rigidbody2D component!");
-        }
-        if (spriteRenderer == null)
-        {
-            Debug.LogError("DirectionFlipper requires a SpriteRenderer component!");
+            // Determine if moving right or left
+            bool movingRight = movementDelta.x > 0;
+            
+            // Check if direction differs from current facing direction
+            if (movingRight && !facingRight)
+            {
+                Flip();
+            }
+            else if (!movingRight && facingRight)
+            {
+                Flip();
+            }
+            
+            previousPosition = transform.position;
         }
     }
 
-    private void Update()
+    private void Flip()
     {
-        // Check horizontal velocity and flip sprite accordingly
-        if (rb.velocity.x > velocityThreshold && !facingRight)
-        {
-            FaceRight();
-        }
-        else if (rb.velocity.x < -velocityThreshold && facingRight)
-        {
-            FaceLeft();
-        }
-    }
-
-    private void FaceRight()
-    {
-        facingRight = true;
-        spriteRenderer.flipX = false;
-    }
-
-    private void FaceLeft()
-    {
-        facingRight = false;
-        spriteRenderer.flipX = true;
+        facingRight = !facingRight;
+        spriteRenderer.flipX = !spriteRenderer.flipX;
     }
 }

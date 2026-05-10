@@ -305,8 +305,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f493e28b2585344e2af51a5a3c2b9551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocityThreshold: 0.1
-  startsFlipped: 1
+  movementThreshold: 0.01
+  initiallyFacingRight: 1
 --- !u!114 &464946119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,8 +1246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f493e28b2585344e2af51a5a3c2b9551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocityThreshold: 0.1
-  startsFlipped: 0
+  movementThreshold: 0.01
+  initiallyFacingRight: 0
 --- !u!70 &1590551717
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 5f;
-    [SerializeField] private float _jumpForce = 10f;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpForce = 10f;
 
-    private Rigidbody2D _rb;
-    private bool _isGrounded;
-    private bool _jumpQueued;
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private bool jumpQueued;
 
     // -------------------------------------------------------
     // Start()
@@ -15,7 +15,7 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     private void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // -------------------------------------------------------
@@ -25,8 +25,8 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     private void Update()
     {
-        if (_isGrounded && Input.GetButtonDown("Jump"))
-            _jumpQueued = true;
+        if (isGrounded && Input.GetButtonDown("Jump"))
+            jumpQueued = true;
     }
 
     // -------------------------------------------------------
@@ -36,12 +36,12 @@ public class PlayerMover : MonoBehaviour
     private void FixedUpdate()
     {
         float input = Input.GetAxisRaw("Horizontal");
-        _rb.velocity = new Vector2(input * _moveSpeed, _rb.velocity.y);
+        rb.velocity = new Vector2(input * moveSpeed, rb.velocity.y);
 
-        if (_jumpQueued)
+        if (jumpQueued)
         {
-            _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
-            _jumpQueued = false;
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumpQueued = false;
         }
     }
 
@@ -52,6 +52,6 @@ public class PlayerMover : MonoBehaviour
     // as ground. Propose: add a groundLayer mask when it becomes
     // a problem.
     // -------------------------------------------------------
-    private void OnCollisionEnter2D(Collision2D col) => _isGrounded = true;
-    private void OnCollisionExit2D(Collision2D col) => _isGrounded = false;
+    private void OnCollisionEnter2D(Collision2D col) => isGrounded = true;
+    private void OnCollisionExit2D(Collision2D col) => isGrounded = false;
 }

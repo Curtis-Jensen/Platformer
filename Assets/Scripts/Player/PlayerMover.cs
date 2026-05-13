@@ -5,7 +5,12 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
 
+    [Header("Jump Sprite")]
+    [SerializeField] private Sprite jumpingSprite;
+
     private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
+    private Sprite idleSprite;
     private bool isGrounded;
     private bool jumpQueued;
 
@@ -16,6 +21,8 @@ public class PlayerMover : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        idleSprite = spriteRenderer.sprite;
     }
 
     // -------------------------------------------------------
@@ -52,6 +59,15 @@ public class PlayerMover : MonoBehaviour
     // as ground. Propose: add a groundLayer mask when it becomes
     // a problem.
     // -------------------------------------------------------
-    private void OnCollisionEnter2D(Collision2D col) => isGrounded = true;
-    private void OnCollisionExit2D(Collision2D col) => isGrounded = false;
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        isGrounded = true;
+        if (spriteRenderer != null) spriteRenderer.sprite = idleSprite;
+    }
+
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        isGrounded = false;
+        if (spriteRenderer != null && jumpingSprite != null) spriteRenderer.sprite = jumpingSprite;
+    }
 }

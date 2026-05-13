@@ -14,6 +14,7 @@ public class RandomAudioPlayer : MonoBehaviour
     private AudioSource audioSource;
     private SpriteRenderer spriteRenderer;
     private Sprite idleSprite;
+    private float basePitch;
     private float timeSinceLastPlay;
     private float nextPlayTime;
 
@@ -22,6 +23,7 @@ public class RandomAudioPlayer : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         idleSprite = spriteRenderer.sprite;
+        basePitch = audioSource.pitch;
         SetNextPlayTime();
     }
 
@@ -41,12 +43,15 @@ public class RandomAudioPlayer : MonoBehaviour
     {
         if (audioSource == null) return;
 
-        float randomPitch = 1f + Random.Range(-pitchVariation, pitchVariation);
+        float randomPitch = basePitch + Random.Range(-pitchVariation, pitchVariation);
         audioSource.pitch = randomPitch;
         audioSource.Play();
 
+        float clipDuration = audioSource.clip.length / randomPitch;
         if (spriteRenderer != null && mooingSprite != null)
-            StartCoroutine(SwapSprite(audioSource.clip.length / randomPitch));
+            StartCoroutine(SwapSprite(clipDuration));
+        else
+            StartCoroutine(ResetPitchAfter(clipDuration));
     }
 
     private IEnumerator SwapSprite(float duration)
@@ -54,6 +59,13 @@ public class RandomAudioPlayer : MonoBehaviour
         spriteRenderer.sprite = mooingSprite;
         yield return new WaitForSeconds(duration);
         spriteRenderer.sprite = idleSprite;
+        audioSource.pitch = basePitch;
+    }
+
+    private IEnumerator ResetPitchAfter(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        audioSource.pitch = basePitch;
     }
 
     private void SetNextPlayTime()

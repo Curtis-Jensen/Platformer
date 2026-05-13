@@ -101,7 +101,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d5ce757589a9247c187a98d4f265112b, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -201,8 +201,6 @@ MonoBehaviour:
   minInterval: 5
   maxInterval: 10
   pitchVariation: 0.2
-  spriteRenderer: {fileID: 0}
-  idleSprite: {fileID: 0}
   mooingSprite: {fileID: 0}
 --- !u!114 &4983509728504839222
 MonoBehaviour:

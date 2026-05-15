@@ -34,14 +34,11 @@ public class ProceduralClimber : MonoBehaviour
     private Transform player;
     private int nextTileY;
     private int prevCenterX;
-    private int driftDir = 1;
-
     private void Start()
     {
         tilemap = FindObjectOfType<Tilemap>();
         player = FindObjectOfType<PlayerMover>().transform;
         prevCenterX = Random.Range(minX, maxX + 1);
-        driftDir = Random.value < 0.5f ? -1 : 1;
         nextTileY = startTileY;
     }
 
@@ -57,12 +54,7 @@ public class ProceduralClimber : MonoBehaviour
     {
         int width = Random.Range(minWidth, maxWidth + 1);
 
-        // Bias the step in driftDir so the tower visibly sways; reverse at walls
-        int biasedMin = driftDir > 0 ? 0 : -maxHorizontalStep;
-        int biasedMax = driftDir > 0 ? maxHorizontalStep : 0;
-        int step = Random.Range(biasedMin, biasedMax + 1);
-        int cx = Mathf.Clamp(prevCenterX + step, minX, maxX);
-        if (cx == minX || cx == maxX) driftDir = -driftDir;
+        int cx = Mathf.Clamp(prevCenterX + Random.Range(-maxHorizontalStep, maxHorizontalStep + 1), minX, maxX);
 
         int left = cx - width / 2;
         int right = left + width - 1;

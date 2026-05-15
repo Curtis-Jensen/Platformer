@@ -462,6 +462,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4983509728504839218, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: MaxDistance
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839218, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: MinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839218, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: f8028e56a789f405ab7eb02c1b6479e8, type: 3}
@@ -2153,6 +2161,10 @@ PrefabInstance:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: f8028e56a789f405ab7eb02c1b6479e8, type: 3}
+    - target: {fileID: 4983509728504839218, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: rolloffMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4983509728504839230, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_Name
       value: Cockroach

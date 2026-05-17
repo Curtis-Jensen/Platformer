@@ -1995,10 +1995,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cockroach
       objectReference: {fileID: 0}
-    - target: {fileID: 6561914691589573913, guid: 4e81c5957524b489abd46afb91dc2261, type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: f8028e56a789f405ab7eb02c1b6479e8, type: 3}
     - target: {fileID: 6561914691589573915, guid: 4e81c5957524b489abd46afb91dc2261, type: 3}
       propertyPath: m_RootOrder
       value: 7

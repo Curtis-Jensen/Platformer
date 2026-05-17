@@ -55,10 +55,11 @@ Assets/Scripts/Enemies/
  DirectionFlipper.cs
  SideScrollPatroller.cs
  Stompable.cs
-Assets/Scripts/Player/
- ClimberCamera.cs
- PlayerMover.cs
 Assets/Scripts/
+ Hopper.cs
+ Player/
+  ClimberCamera.cs
+  PlayerMover.cs
  ProceduralClimber.cs
  RandomAudioPlayer.cs
 Temp/obj/Debug/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs

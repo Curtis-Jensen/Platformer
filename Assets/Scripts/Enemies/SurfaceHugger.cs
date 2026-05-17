@@ -5,7 +5,7 @@ using UnityEngine;
 // No floor ahead    → turn to descend the edge (rotate 90° away from floor)
 // Requires a single BoxCollider2D sized to the worm's body.
 [RequireComponent(typeof(BoxCollider2D))]
-public class SurfaceWorm : MonoBehaviour
+public class SurfaceHugger : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rayLength = 0.15f;   // how far ahead / below to probe

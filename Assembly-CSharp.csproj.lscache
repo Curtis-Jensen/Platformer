@@ -55,7 +55,7 @@ Assets/Scripts/Enemies/
  DirectionFlipper.cs
  SideScrollPatroller.cs
  Stompable.cs
- SurfaceWorm.cs
+ SurfaceHugger.cs
 Assets/Scripts/
  Hopper.cs
  Player/

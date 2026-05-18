@@ -1175,9 +1175,9 @@ MonoBehaviour:
   minX: -8
   maxX: 8
   maxHorizontalStep: 5
-  minWidth: 2
+  minWidth: 1
   maxWidth: 8
-  startTileY: -2
+  startTileY: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

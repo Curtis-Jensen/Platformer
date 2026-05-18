@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4983509728504839230, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_Name
-      value: Grasshopper
+      value: Grasshopper Variant
       objectReference: {fileID: 0}
     - target: {fileID: 4983509728504839231, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_Size.x
@@ -79,6 +79,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4983509728504839230, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
   m_PrefabInstance: {fileID: 6411910095431857071}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-5575239069400591496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149155950153371537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b15ee63b63257442098d609f2dc37be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  squishDuration: 0.15
 --- !u!114 &5925657915504954811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,3 +109,17 @@ MonoBehaviour:
   minHopInterval: 0.6
   maxHopInterval: 1.4
   hoppingSprite: {fileID: 0}
+--- !u!114 &6668474612379195695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149155950153371537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52339b2f3f1e4f7db5d3e65c0f8c32f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  invincibilityWindow: 0.5

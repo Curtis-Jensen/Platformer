@@ -6,8 +6,9 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float coyoteTime = 0.1f;
 
-    [Header("Jump Sprite")]
+    [Header("Sprites")]
     [SerializeField] private Sprite jumpingSprite;
+    [SerializeField] private Sprite fallingSprite;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -42,6 +43,8 @@ public class PlayerMover : MonoBehaviour
                 SetGrounded(false);
         }
 
+        UpdateAirborneSprite();
+
         if (isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
     }
@@ -71,8 +74,23 @@ public class PlayerMover : MonoBehaviour
     private void SetGrounded(bool grounded)
     {
         isGrounded = grounded;
-        if (spriteRenderer == null) return;
-        spriteRenderer.sprite = grounded ? idleSprite : (jumpingSprite != null ? jumpingSprite : idleSprite);
+        if (!grounded) return;
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = idleSprite;
+    }
+
+    // -------------------------------------------------------
+    // UpdateAirborneSprite()
+    // While airborne, picks jump or fall sprite based on velocity.
+    // -------------------------------------------------------
+    private void UpdateAirborneSprite()
+    {
+        if (isGrounded || spriteRenderer == null) return;
+        bool rising = rb.velocity.y > 0f;
+        Sprite target = rising
+            ? (jumpingSprite != null ? jumpingSprite : idleSprite)
+            : (fallingSprite != null ? fallingSprite : (jumpingSprite != null ? jumpingSprite : idleSprite));
+        spriteRenderer.sprite = target;
     }
 
     // -------------------------------------------------------

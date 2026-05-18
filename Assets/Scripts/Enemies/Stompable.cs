@@ -29,8 +29,11 @@ public class Stompable : MonoBehaviour
         float enemyCenter = col.bounds.center.y;
         if (playerFeet >= enemyCenter)
         {
+            // Capture bounds before disabling — disabled colliders return zeroed bounds
+            float bottomY = col.bounds.min.y;
+            float halfHeight = col.bounds.extents.y;
             col.enabled = false;
-            StartCoroutine(SquishThenDie());
+            StartCoroutine(SquishThenDie(bottomY, halfHeight));
         }
     }
 
@@ -39,10 +42,8 @@ public class Stompable : MonoBehaviour
     // Lerps localScale Y from current to 0 over squishDuration, then destroys.
     // Pins the bottom of the sprite to the ground by adjusting position each frame.
     // -------------------------------------------------------
-    IEnumerator SquishThenDie()
+    IEnumerator SquishThenDie(float fixedBottomY, float originalHalfHeight)
     {
-        float fixedBottomY = col.bounds.min.y;
-        float originalHalfHeight = col.bounds.extents.y;
         Vector3 startScale = transform.localScale;
         Vector3 endScale = new Vector3(startScale.x, 0f, startScale.z);
         float elapsed = 0f;

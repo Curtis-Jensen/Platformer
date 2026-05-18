@@ -51,12 +51,13 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 /warnaserror+:NU1605
 
 [sourceFiles]
-Assets/Scripts/Enemies/
- DirectionFlipper.cs
- SideScrollPatroller.cs
- Stompable.cs
- SurfaceWorm.cs
 Assets/Scripts/
+ BouncePad.cs
+ Enemies/
+  DirectionFlipper.cs
+  SideScrollPatroller.cs
+  Stompable.cs
+  SurfaceWorm.cs
  Hopper.cs
  Player/
   ClimberCamera.cs

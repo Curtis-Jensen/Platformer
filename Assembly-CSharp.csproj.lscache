@@ -55,12 +55,15 @@ Assets/Scripts/
  BouncePad.cs
  Enemies/
   DirectionFlipper.cs
+  SideAttack.cs
   SideScrollPatroller.cs
   Stompable.cs
   SurfaceWorm.cs
+ Health.cs
  Hopper.cs
  Player/
   ClimberCamera.cs
+  PlayerDeath.cs
   PlayerMover.cs
  ProceduralClimber.cs
  RandomAudioPlayer.cs

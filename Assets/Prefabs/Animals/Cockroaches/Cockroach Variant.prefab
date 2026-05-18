@@ -57,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: f8028e56a789f405ab7eb02c1b6479e8, type: 3}
     - target: {fileID: 4983509728504839230, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_Name
-      value: Cockroach
+      value: Cockroach Variant
       objectReference: {fileID: 0}
     - target: {fileID: 4983509728504839231, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_Size.x
@@ -94,3 +94,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15ee63b63257442098d609f2dc37be2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1400205571259219739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6561914691589573909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52339b2f3f1e4f7db5d3e65c0f8c32f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  invincibilityWindow: 0.5

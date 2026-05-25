@@ -1,18 +1,22 @@
 using UnityEngine;
 
-// Drop on any platform with a Rigidbody2D (Kinematic).
+public enum PlatformLoopMode { Loop, PingPong }
+
 // The platform's scene position is always waypoint 0.
 // Add additional world-space stops in the Inspector array.
-// Loops through all stops in order, pausing at each if pauseTime > 0.
+// Pauses at each stop if pauseTime > 0.
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlatformMover : MonoBehaviour
 {
     [SerializeField] private Vector2[] additionalWaypoints;
     [SerializeField] private float speed = 2f;
     [SerializeField] private float pauseTime = 0f;
+    [SerializeField] private PlatformLoopMode loopMode = PlatformLoopMode.PingPong;
 
     private Rigidbody2D rb;
     private Vector2[] waypoints;
     private int targetIndex;
+    private int direction = 1;
     private float pauseTimer;
 
     // -------------------------------------------------------
@@ -36,8 +40,9 @@ public class PlatformMover : MonoBehaviour
     // FixedUpdate()
     // Moves the platform toward the current target waypoint
     // via MovePosition (kinematic-safe, carries standing objects).
-    // When close enough, advances to the next waypoint index
-    // and starts a pause if pauseTime is set.
+    // On arrival, advances the index according to loopMode:
+    //   Loop     — wraps back to 0 after the last stop.
+    //   PingPong — reverses direction at each end.
     // -------------------------------------------------------
     private void FixedUpdate()
     {
@@ -55,8 +60,29 @@ public class PlatformMover : MonoBehaviour
 
         if (Vector2.Distance(rb.position, target) < 0.01f)
         {
-            targetIndex = (targetIndex + 1) % waypoints.Length;
+            AdvanceWaypoint();
             pauseTimer = pauseTime;
+        }
+    }
+
+    // -------------------------------------------------------
+    // AdvanceWaypoint()
+    // Updates targetIndex based on the current loopMode.
+    // -------------------------------------------------------
+    private void AdvanceWaypoint()
+    {
+        if (loopMode == PlatformLoopMode.Loop)
+        {
+            targetIndex = (targetIndex + 1) % waypoints.Length;
+        }
+        else
+        {
+            targetIndex += direction;
+            if (targetIndex >= waypoints.Length || targetIndex < 0)
+            {
+                direction = -direction;
+                targetIndex += direction * 2;
+            }
         }
     }
 }

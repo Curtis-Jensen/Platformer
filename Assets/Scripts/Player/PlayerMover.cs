@@ -9,6 +9,7 @@ public class PlayerMover : MonoBehaviour
     [Header("Sprites")]
     [SerializeField] private Sprite jumpingSprite;
     [SerializeField] private Sprite fallingSprite;
+    [SerializeField] private Sprite sittingSprite;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -16,6 +17,8 @@ public class PlayerMover : MonoBehaviour
     private bool isGrounded;
     private bool jumpQueued;
     private float coyoteTimer;
+
+    public bool IsSitting { get; private set; }
 
     // -------------------------------------------------------
     // Start()
@@ -45,16 +48,23 @@ public class PlayerMover : MonoBehaviour
 
         UpdateAirborneSprite();
 
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (!IsSitting && isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
     }
 
     // -------------------------------------------------------
     // FixedUpdate()
     // Applies horizontal movement and any queued jump impulse.
+    // Both are suppressed while the player is sitting.
     // -------------------------------------------------------
     private void FixedUpdate()
     {
+        if (IsSitting)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         float input = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(input * moveSpeed, rb.velocity.y);
 
@@ -110,5 +120,30 @@ public class PlayerMover : MonoBehaviour
     {
         if (!col.gameObject.CompareTag("Ground")) return;
         coyoteTimer = coyoteTime;
+    }
+
+    // -------------------------------------------------------
+    // Sit(Vector2)
+    // Snaps the player to the bench position, freezes movement,
+    // and swaps to the sitting sprite if one is assigned.
+    // -------------------------------------------------------
+    public void Sit(Vector2 benchPosition)
+    {
+        IsSitting = true;
+        rb.velocity = Vector2.zero;
+        transform.position = new Vector3(benchPosition.x, transform.position.y, transform.position.z);
+        if (spriteRenderer != null && sittingSprite != null)
+            spriteRenderer.sprite = sittingSprite;
+    }
+
+    // -------------------------------------------------------
+    // StandUp()
+    // Restores normal movement and resets to the idle sprite.
+    // -------------------------------------------------------
+    public void StandUp()
+    {
+        IsSitting = false;
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = idleSprite;
     }
 }

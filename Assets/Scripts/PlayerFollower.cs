@@ -20,6 +20,11 @@ public class PlayerFollower : MonoBehaviour
     [Tooltip("How quickly the lookahead shifts (lower = lazier)")]
     [SerializeField] private float lookaheadSpeed = 3f;
 
+    [Header("Zoom")]
+    [SerializeField] private float zoomSpeed = 2f;
+    [SerializeField] private float minZoom = 3f;
+    [SerializeField] private float maxZoom = 12f;
+
     [Header("Bounds")]
     [Tooltip("Clamp the camera within these world-space bounds (leave at 0 to disable)")]
     [SerializeField] private bool useBounds = false;
@@ -29,11 +34,13 @@ public class PlayerFollower : MonoBehaviour
     [SerializeField] private float maxY = 100f;
 
     private Transform target;
+    private Camera cam;
     private float currentLookahead;
     private float lastTargetX;
 
     private void Start()
     {
+        cam = GetComponent<Camera>();
         GameObject player = GameObject.FindWithTag(playerTag);
         if (player != null)
         {
@@ -42,9 +49,27 @@ public class PlayerFollower : MonoBehaviour
         }
     }
 
+    // -------------------------------------------------------
+    // HandleZoom()
+    // Reads scroll wheel input and adjusts orthographic size,
+    // clamped between minZoom and maxZoom.
+    // -------------------------------------------------------
+    private void HandleZoom()
+    {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scroll) < 0.001f) return;
+        cam.orthographicSize = Mathf.Clamp(
+            cam.orthographicSize - scroll * zoomSpeed,
+            minZoom,
+            maxZoom
+        );
+    }
+
     private void LateUpdate()
     {
         if (target == null) return;
+
+        HandleZoom();
 
         // Lookahead: drift toward where the player is heading
         float moveDir = target.position.x - lastTargetX;

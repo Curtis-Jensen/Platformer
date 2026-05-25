@@ -35,35 +35,17 @@ public class PlayerInteractor : MonoBehaviour
             currentTarget = nearest;
 
             if (currentTarget != null)
-            {
                 currentTarget.ShowPrompt(true);
-                Debug.Log($"[PlayerInteractor] Target acquired: {currentTarget.gameObject.name}");
-            }
-            else
-            {
-                Debug.Log("[PlayerInteractor] No interactable in range.");
-            }
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (currentTarget != null)
-            {
-                Debug.Log($"[PlayerInteractor] E pressed -- interacting with {currentTarget.gameObject.name}");
-                currentTarget.Interact(playerMover);
-            }
-            else
-            {
-                Debug.Log("[PlayerInteractor] E pressed but no target in range.");
-            }
-        }
+        if (currentTarget != null && Input.GetKeyDown(KeyCode.E))
+            currentTarget.Interact(playerMover);
     }
 
     // -------------------------------------------------------
     // FindNearest()
     // OverlapCircle to collect all Interactables nearby,
     // returns the one with the smallest distance.
-    // Logs raw hit count so we can catch layer mask mismatches.
     // -------------------------------------------------------
     private Interactable FindNearest()
     {
@@ -75,11 +57,7 @@ public class PlayerInteractor : MonoBehaviour
         foreach (Collider2D hit in hits)
         {
             Interactable interactable = hit.GetComponent<Interactable>();
-            if (interactable == null)
-            {
-                Debug.Log($"[PlayerInteractor] Hit '{hit.gameObject.name}' on layer '{LayerMask.LayerToName(hit.gameObject.layer)}' but no Interactable component found.");
-                continue;
-            }
+            if (interactable == null) continue;
 
             float dist = Vector2.Distance(transform.position, interactable.transform.position);
             if (dist < bestDist)

@@ -1701,22 +1701,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
-    - target: {fileID: 3258623629600760476, guid: 27dd4e5b3d7de465b95f80f15aa916ef, type: 3}
-      propertyPath: useBounds
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3258623629600760476, guid: 27dd4e5b3d7de465b95f80f15aa916ef, type: 3}
-      propertyPath: deadzone.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3258623629600760476, guid: 27dd4e5b3d7de465b95f80f15aa916ef, type: 3}
-      propertyPath: lookaheadSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3258623629600760476, guid: 27dd4e5b3d7de465b95f80f15aa916ef, type: 3}
-      propertyPath: lookaheadDistance
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 3258623629600760477, guid: 27dd4e5b3d7de465b95f80f15aa916ef, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1814,10 +1798,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4632953003680983275, guid: a7ba09cb7ec8f4ca393b5195cf45052d, type: 3}
-      propertyPath: fallingSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 72a51f4efda5f4be59a6ccd63d9d5522, type: 3}
     - target: {fileID: 4632953003680983276, guid: a7ba09cb7ec8f4ca393b5195cf45052d, type: 3}
       propertyPath: m_Name
       value: Player

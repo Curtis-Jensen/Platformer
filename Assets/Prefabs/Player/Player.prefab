@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4632953003680983275}
   - component: {fileID: 4632953003680983268}
   - component: {fileID: 4632953003680983269}
+  - component: {fileID: 4632953003300449070}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -156,7 +157,6 @@ MonoBehaviour:
   moveSpeed: 5
   jumpForce: 10
   coyoteTime: 0.18
-  jumpingSprite: {fileID: 21300000, guid: 9d10d7b906c164f3890d43b332918c73, type: 3}
 --- !u!114 &4632953003680983268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,3 +204,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   corpsePrefab: {fileID: 3222055173057998633, guid: c72a10b3ab7d54cb18c27ca18833eab7, type: 3}
+--- !u!114 &4632953003300449070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632953003680983276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c13eeb13ffe194917859c6ba3b0d861e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleSprite: {fileID: 21300000, guid: cbf29433f687a4df6a65d3c259916b77, type: 3}
+  jumpingSprite: {fileID: 21300000, guid: 9d10d7b906c164f3890d43b332918c73, type: 3}
+  fallingSprite: {fileID: 21300000, guid: 2397dc2be43dc4df4b11c786c95516c6, type: 3}

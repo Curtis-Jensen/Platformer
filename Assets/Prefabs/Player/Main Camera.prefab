@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3258623629600760417}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 40.8, y: 5.51, z: -2.1}
   m_LocalScale: {x: 0.21, y: 0.21, z: 0.21}
   m_ConstrainProportionsScale: 0
@@ -135,10 +135,13 @@ MonoBehaviour:
   playerTag: Player
   smoothSpeed: 1000
   offset: {x: 0, y: 1}
-  deadzone: {x: 1, y: 0.5}
-  lookaheadDistance: 1.5
-  lookaheadSpeed: 3
-  useBounds: 0
+  deadzone: {x: 3, y: 0.5}
+  lookaheadDistance: 5
+  lookaheadSpeed: 10
+  zoomSpeed: 2
+  minZoom: 3
+  maxZoom: 12
+  useBounds: 1
   minX: -100
   maxX: 100
   minY: -100

@@ -16,6 +16,12 @@ public class PlayerMover : MonoBehaviour
     private bool jumpQueued;
     private float coyoteTimer;
 
+    // Counter-based lock: multiple systems can independently lock movement
+    // without knowing about each other. Movement is blocked as long as this is > 0.
+    private int movementLockCount;
+
+    public bool IsMovementLocked => movementLockCount > 0;
+
     // -------------------------------------------------------
     // Start()
     // Caches components needed for movement and sprite swapping.
@@ -42,7 +48,7 @@ public class PlayerMover : MonoBehaviour
                 SetGrounded(false);
         }
 
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (!IsMovementLocked && isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
     }
 
@@ -52,6 +58,12 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     private void FixedUpdate()
     {
+        if (IsMovementLocked)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         float input = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(input * moveSpeed, rb.velocity.y);
 
@@ -62,6 +74,21 @@ public class PlayerMover : MonoBehaviour
             coyoteTimer = 0f;
             SetGrounded(false); // Pre-emptively unground so the coyote window can't reopen on CollisionExit
         }
+    }
+
+    // -------------------------------------------------------
+    // LockMovement() / UnlockMovement()
+    // Increment or decrement the lock counter. Any system that
+    // locks movement is responsible for unlocking it when done.
+    // -------------------------------------------------------
+    public void LockMovement()
+    {
+        movementLockCount++;
+    }
+
+    public void UnlockMovement()
+    {
+        movementLockCount = Mathf.Max(0, movementLockCount - 1);
     }
 
     // -------------------------------------------------------

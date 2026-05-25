@@ -9,7 +9,6 @@ public class PlayerMover : MonoBehaviour
     [Header("Sprites")]
     [SerializeField] private Sprite jumpingSprite;
     [SerializeField] private Sprite fallingSprite;
-    [SerializeField] private Sprite sittingSprite;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -18,7 +17,11 @@ public class PlayerMover : MonoBehaviour
     private bool jumpQueued;
     private float coyoteTimer;
 
-    public bool IsSitting { get; private set; }
+    // Counter-based lock: multiple systems can independently lock movement
+    // without knowing about each other. Movement is blocked as long as this is > 0.
+    private int movementLockCount;
+
+    public bool IsMovementLocked => movementLockCount > 0;
 
     // -------------------------------------------------------
     // Start()
@@ -36,6 +39,7 @@ public class PlayerMover : MonoBehaviour
     // Reads jump input and ticks the coyote timer down.
     // Clears isGrounded only once the coyote window expires,
     // smoothing over micro-bumps and tile seams.
+    // Jump is suppressed while movement is locked.
     // -------------------------------------------------------
     private void Update()
     {
@@ -48,18 +52,18 @@ public class PlayerMover : MonoBehaviour
 
         UpdateAirborneSprite();
 
-        if (!IsSitting && isGrounded && Input.GetButtonDown("Jump"))
+        if (!IsMovementLocked && isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
     }
 
     // -------------------------------------------------------
     // FixedUpdate()
     // Applies horizontal movement and any queued jump impulse.
-    // Both are suppressed while the player is sitting.
+    // Both are suppressed while movement is locked.
     // -------------------------------------------------------
     private void FixedUpdate()
     {
-        if (IsSitting)
+        if (IsMovementLocked)
         {
             rb.velocity = Vector2.zero;
             return;
@@ -75,6 +79,22 @@ public class PlayerMover : MonoBehaviour
             coyoteTimer = 0f;
             SetGrounded(false); // Pre-emptively unground so the coyote window can't reopen on CollisionExit
         }
+    }
+
+    // -------------------------------------------------------
+    // LockMovement() / UnlockMovement()
+    // Increment or decrement the lock counter. Any system that
+    // locks movement is responsible for unlocking it when done.
+    // Movement stays locked until all locks are released.
+    // -------------------------------------------------------
+    public void LockMovement()
+    {
+        movementLockCount++;
+    }
+
+    public void UnlockMovement()
+    {
+        movementLockCount = Mathf.Max(0, movementLockCount - 1);
     }
 
     // -------------------------------------------------------
@@ -120,30 +140,5 @@ public class PlayerMover : MonoBehaviour
     {
         if (!col.gameObject.CompareTag("Ground")) return;
         coyoteTimer = coyoteTime;
-    }
-
-    // -------------------------------------------------------
-    // Sit(Vector2)
-    // Snaps the player to the bench position, freezes movement,
-    // and swaps to the sitting sprite if one is assigned.
-    // -------------------------------------------------------
-    public void Sit(Vector2 benchPosition)
-    {
-        IsSitting = true;
-        rb.velocity = Vector2.zero;
-        transform.position = new Vector3(benchPosition.x, transform.position.y, transform.position.z);
-        if (spriteRenderer != null && sittingSprite != null)
-            spriteRenderer.sprite = sittingSprite;
-    }
-
-    // -------------------------------------------------------
-    // StandUp()
-    // Restores normal movement and resets to the idle sprite.
-    // -------------------------------------------------------
-    public void StandUp()
-    {
-        IsSitting = false;
-        if (spriteRenderer != null)
-            spriteRenderer.sprite = idleSprite;
     }
 }

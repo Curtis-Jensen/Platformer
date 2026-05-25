@@ -4,11 +4,11 @@ using UnityEngine;
 // Extend this, override Interact(), and drop it on a GameObject.
 public abstract class Interactable : MonoBehaviour
 {
-    [SerializeField] public string promptText = "Press E";
+    [SerializeField] public string promptString = "Press E";
 
     // Optional world-space prompt object (e.g. a Canvas with "Press E" text).
     // Wire one up in the prefab, or leave empty -- both work.
-    [SerializeField] private GameObject promptObject;
+    [SerializeField] private GameObject promptText;
 
     // -------------------------------------------------------
     // ShowPrompt(bool)
@@ -17,8 +17,8 @@ public abstract class Interactable : MonoBehaviour
     // -------------------------------------------------------
     public void ShowPrompt(bool visible)
     {
-        if (promptObject != null)
-            promptObject.SetActive(visible);
+        if (promptText != null)
+            promptText.SetActive(visible);
     }
 
     // -------------------------------------------------------

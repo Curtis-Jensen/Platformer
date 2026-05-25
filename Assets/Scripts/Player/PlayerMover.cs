@@ -6,11 +6,21 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float coyoteTime = 0.1f;
 
+    [Header("Sprites")]
+    [SerializeField] private Sprite jumpingSprite;
+    [SerializeField] private Sprite fallingSprite;
+
     private Rigidbody2D rb;
     private PlayerAppearance appearance;
     private bool isGrounded;
     private bool jumpQueued;
     private float coyoteTimer;
+
+    // Counter-based lock: multiple systems can independently lock movement
+    // without knowing about each other. Movement is blocked as long as this is > 0.
+    private int movementLockCount;
+
+    public bool IsMovementLocked => movementLockCount > 0;
 
     // -------------------------------------------------------
     // Start()
@@ -25,8 +35,9 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     // Update()
     // Reads jump input and ticks the coyote timer down.
-    // While airborne, tells PlayerAppearance to pick the right
-    // sprite based on whether Dawson is rising or falling.
+    // Clears isGrounded only once the coyote window expires,
+    // smoothing over micro-bumps and tile seams.
+    // Jump is suppressed while movement is locked.
     // -------------------------------------------------------
     private void Update()
     {
@@ -37,7 +48,9 @@ public class PlayerMover : MonoBehaviour
                 SetGrounded(false);
         }
 
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        UpdateAirborneSprite();
+
+        if (!IsMovementLocked && isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
 
         // Keep the airborne sprite in sync with vertical velocity
@@ -49,9 +62,16 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     // FixedUpdate()
     // Applies horizontal movement and any queued jump impulse.
+    // Both are suppressed while movement is locked.
     // -------------------------------------------------------
     private void FixedUpdate()
     {
+        if (IsMovementLocked)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         float input = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(input * moveSpeed, rb.velocity.y);
 
@@ -65,6 +85,22 @@ public class PlayerMover : MonoBehaviour
     }
 
     // -------------------------------------------------------
+    // LockMovement() / UnlockMovement()
+    // Increment or decrement the lock counter. Any system that
+    // locks movement is responsible for unlocking it when done.
+    // Movement stays locked until all locks are released.
+    // -------------------------------------------------------
+    public void LockMovement()
+    {
+        movementLockCount++;
+    }
+
+    public void UnlockMovement()
+    {
+        movementLockCount = Mathf.Max(0, movementLockCount - 1);
+    }
+
+    // -------------------------------------------------------
     // SetGrounded(bool)
     // Updates grounded state and delegates the visual change
     // to PlayerAppearance.
@@ -72,10 +108,23 @@ public class PlayerMover : MonoBehaviour
     private void SetGrounded(bool grounded)
     {
         isGrounded = grounded;
-        if (grounded)
-            appearance?.SetIdle();
-        // When becoming airborne the velocity-driven Update loop
-        // takes over and picks jumping vs. falling each frame.
+        if (!grounded) return;
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = idleSprite;
+    }
+
+    // -------------------------------------------------------
+    // UpdateAirborneSprite()
+    // While airborne, picks jump or fall sprite based on velocity.
+    // -------------------------------------------------------
+    private void UpdateAirborneSprite()
+    {
+        if (isGrounded || spriteRenderer == null) return;
+        bool rising = rb.velocity.y > 0f;
+        Sprite target = rising
+            ? (jumpingSprite != null ? jumpingSprite : idleSprite)
+            : (fallingSprite != null ? fallingSprite : (jumpingSprite != null ? jumpingSprite : idleSprite));
+        spriteRenderer.sprite = target;
     }
 
     // -------------------------------------------------------

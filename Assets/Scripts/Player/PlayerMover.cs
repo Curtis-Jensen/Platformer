@@ -6,32 +6,27 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float coyoteTime = 0.1f;
 
-    [Header("Jump Sprite")]
-    [SerializeField] private Sprite jumpingSprite;
-
     private Rigidbody2D rb;
-    private SpriteRenderer spriteRenderer;
-    private Sprite idleSprite;
+    private PlayerAppearance appearance;
     private bool isGrounded;
     private bool jumpQueued;
     private float coyoteTimer;
 
     // -------------------------------------------------------
     // Start()
-    // Caches components needed for movement and sprite swapping.
+    // Caches components needed for movement and appearance.
     // -------------------------------------------------------
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        idleSprite = spriteRenderer.sprite;
+        appearance = GetComponent<PlayerAppearance>();
     }
 
     // -------------------------------------------------------
     // Update()
     // Reads jump input and ticks the coyote timer down.
-    // Clears isGrounded only once the coyote window expires,
-    // smoothing over micro-bumps and tile seams.
+    // While airborne, tells PlayerAppearance to pick the right
+    // sprite based on whether Dawson is rising or falling.
     // -------------------------------------------------------
     private void Update()
     {
@@ -44,6 +39,11 @@ public class PlayerMover : MonoBehaviour
 
         if (isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
+
+        // Keep the airborne sprite in sync with vertical velocity
+        // so the jump→fall transition happens naturally at the apex.
+        if (!isGrounded)
+            appearance?.SetAirborne(rb.velocity.y);
     }
 
     // -------------------------------------------------------
@@ -66,13 +66,16 @@ public class PlayerMover : MonoBehaviour
 
     // -------------------------------------------------------
     // SetGrounded(bool)
-    // Central place to update grounded state and swap sprites.
+    // Updates grounded state and delegates the visual change
+    // to PlayerAppearance.
     // -------------------------------------------------------
     private void SetGrounded(bool grounded)
     {
         isGrounded = grounded;
-        if (spriteRenderer == null) return;
-        spriteRenderer.sprite = grounded ? idleSprite : (jumpingSprite != null ? jumpingSprite : idleSprite);
+        if (grounded)
+            appearance?.SetIdle();
+        // When becoming airborne the velocity-driven Update loop
+        // takes over and picks jumping vs. falling each frame.
     }
 
     // -------------------------------------------------------

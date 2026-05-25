@@ -6,11 +6,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float coyoteTime = 0.1f;
 
-    [Header("Sprites")]
-    [SerializeField] private Sprite jumpingSprite;
-    [SerializeField] private Sprite fallingSprite;
-
     private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
     private PlayerAppearance appearance;
     private bool isGrounded;
     private bool jumpQueued;
@@ -28,8 +25,9 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        appearance = GetComponent<PlayerAppearance>();
+        rb             = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        appearance     = GetComponent<PlayerAppearance>();
     }
 
     // -------------------------------------------------------
@@ -48,15 +46,13 @@ public class PlayerMover : MonoBehaviour
                 SetGrounded(false);
         }
 
-        UpdateAirborneSprite();
-
         if (!IsMovementLocked && isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
 
         // Keep the airborne sprite in sync with vertical velocity
         // so the jump→fall transition happens naturally at the apex.
         if (!isGrounded)
-            appearance?.SetAirborne(rb.velocity.y);
+            UpdateAirborneSprite();
     }
 
     // -------------------------------------------------------
@@ -108,23 +104,29 @@ public class PlayerMover : MonoBehaviour
     private void SetGrounded(bool grounded)
     {
         isGrounded = grounded;
-        if (!grounded) return;
-        if (spriteRenderer != null)
-            spriteRenderer.sprite = idleSprite;
+        if (grounded)
+            ApplySprite(appearance?.IdleSprite);
+        // When becoming airborne, UpdateAirborneSprite in Update takes over.
     }
 
     // -------------------------------------------------------
     // UpdateAirborneSprite()
     // While airborne, picks jump or fall sprite based on velocity.
     // -------------------------------------------------------
+    // -------------------------------------------------------
+    // ApplySprite(Sprite)
+    // Sets the sprite on the SpriteRenderer; no-ops if either
+    // reference is null so nothing goes blank mid-development.
+    // -------------------------------------------------------
+    private void ApplySprite(Sprite sprite)
+    {
+        if (spriteRenderer != null && sprite != null)
+            spriteRenderer.sprite = sprite;
+    }
+
     private void UpdateAirborneSprite()
     {
-        if (isGrounded || spriteRenderer == null) return;
-        bool rising = rb.velocity.y > 0f;
-        Sprite target = rising
-            ? (jumpingSprite != null ? jumpingSprite : idleSprite)
-            : (fallingSprite != null ? fallingSprite : (jumpingSprite != null ? jumpingSprite : idleSprite));
-        spriteRenderer.sprite = target;
+        ApplySprite(rb.velocity.y >= 0f ? appearance?.JumpingSprite : appearance?.FallingSprite);
     }
 
     // -------------------------------------------------------

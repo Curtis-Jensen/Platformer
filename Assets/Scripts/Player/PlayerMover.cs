@@ -105,28 +105,19 @@ public class PlayerMover : MonoBehaviour
     {
         isGrounded = grounded;
         if (grounded)
-            ApplySprite(appearance?.IdleSprite);
+            appearance?.SetSprite(appearance.IdleSprite);
         // When becoming airborne, UpdateAirborneSprite in Update takes over.
     }
 
     // -------------------------------------------------------
     // UpdateAirborneSprite()
-    // While airborne, picks jump or fall sprite based on velocity.
+    // Picks jumping or falling sprite each frame based on
+    // vertical velocity, so the transition happens naturally
+    // at the arc's apex.
     // -------------------------------------------------------
-    // -------------------------------------------------------
-    // ApplySprite(Sprite)
-    // Sets the sprite on the SpriteRenderer; no-ops if either
-    // reference is null so nothing goes blank mid-development.
-    // -------------------------------------------------------
-    private void ApplySprite(Sprite sprite)
-    {
-        if (spriteRenderer != null && sprite != null)
-            spriteRenderer.sprite = sprite;
-    }
-
     private void UpdateAirborneSprite()
     {
-        ApplySprite(rb.velocity.y >= 0f ? appearance?.JumpingSprite : appearance?.FallingSprite);
+        appearance?.SetSprite(rb.velocity.y >= 0f ? appearance.JumpingSprite : appearance.FallingSprite);
     }
 
     // -------------------------------------------------------

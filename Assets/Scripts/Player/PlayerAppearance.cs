@@ -1,42 +1,35 @@
 using UnityEngine;
 
-// -------------------------------------------------------
-// PlayerAppearance
-//
-// Holds Dawson's sprite assets and owns the SpriteRenderer.
-// One method: SetSprite() — callers pass in whichever of
-// this component's own sprites they want displayed.
-//
-// Sprites
-//   IdleSprite    – grounded
-//   JumpingSprite – airborne, rising  (vy >= 0)
-//   FallingSprite – airborne, falling (vy <  0)
-// -------------------------------------------------------
+[System.Serializable]
+public class PlayerOutfit
+{
+    public Sprite idleSprite;
+    public Sprite jumpingSprite;
+    public Sprite fallingSprite;
+}
+
 public class PlayerAppearance : MonoBehaviour
 {
-    [Header("Sprites")]
-    [SerializeField] private Sprite idleSprite;
-    [SerializeField] private Sprite jumpingSprite;
-    [SerializeField] private Sprite fallingSprite;
+    [SerializeField] private PlayerOutfit currentOutfit;
 
     private SpriteRenderer spriteRenderer;
 
-    public Sprite IdleSprite    => idleSprite;
-    public Sprite JumpingSprite => jumpingSprite;
-    public Sprite FallingSprite => fallingSprite;
+    public Sprite IdleSprite    => currentOutfit?.idleSprite;
+    public Sprite JumpingSprite => currentOutfit?.jumpingSprite;
+    public Sprite FallingSprite => currentOutfit?.fallingSprite;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        SetSprite(idleSprite);
+        SetSprite(IdleSprite);
     }
 
-    // -------------------------------------------------------
-    // SetSprite(Sprite)
-    // Single entry-point for all sprite changes. Pass in one
-    // of the three properties above; no-ops on null so nothing
-    // goes blank while art slots are being filled in.
-    // -------------------------------------------------------
+    public void WearOutfit(PlayerOutfit outfit)
+    {
+        currentOutfit = outfit;
+        SetSprite(IdleSprite);
+    }
+
     public void SetSprite(Sprite sprite)
     {
         if (spriteRenderer == null || sprite == null) return;

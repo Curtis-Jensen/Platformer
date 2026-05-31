@@ -5,6 +5,7 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float coyoteTime = 0.1f;
+    [SerializeField] private float jumpCutGravityScale = 4f;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -78,6 +79,10 @@ public class PlayerMover : MonoBehaviour
             coyoteTimer = 0f;
             SetGrounded(false); // Pre-emptively unground so the coyote window can't reopen on CollisionExit
         }
+
+        // Variable jump height: releasing the button while still rising cranks up gravity
+        // so a tap produces a short hop and a full hold produces the full arc.
+        rb.gravityScale = (rb.velocity.y > 0f && !Input.GetButton("Jump")) ? jumpCutGravityScale : 1f;
     }
 
     // -------------------------------------------------------

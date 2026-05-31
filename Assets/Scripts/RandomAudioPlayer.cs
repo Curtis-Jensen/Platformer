@@ -41,11 +41,13 @@ public class RandomAudioPlayer : MonoBehaviour
 
     private void PlaySound()
     {
-        if (audioSource == null) return;
+        if (audioSource == null || audioSource.clip == null) return;
 
         float randomPitch = basePitch + Random.Range(-pitchVariation, pitchVariation);
         audioSource.pitch = randomPitch;
         audioSource.Play();
+
+        
 
         float clipDuration = audioSource.clip.length / randomPitch;
         if (spriteRenderer != null && mooingSprite != null)

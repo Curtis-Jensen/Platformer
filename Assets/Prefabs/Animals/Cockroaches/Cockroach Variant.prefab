@@ -55,6 +55,10 @@ PrefabInstance:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: f8028e56a789f405ab7eb02c1b6479e8, type: 3}
+    - target: {fileID: 4983509728504839221, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: moveSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4983509728504839230, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_Name
       value: Cockroach Variant
@@ -94,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15ee63b63257442098d609f2dc37be2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  squishDuration: 0.15
 --- !u!114 &-1400205571259219739
 MonoBehaviour:
   m_ObjectHideFlags: 0

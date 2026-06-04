@@ -1,25 +1,34 @@
 using System.Collections;
 using UnityEngine;
 
+// Stompable requires a Health component to function.
+// Stomping deals 1 damage; the squish plays only when Health reaches zero.
+// This means multi-HP enemies take the damage flash on early stomps and squish on the last.
+[RequireComponent(typeof(Health))]
 public class Stompable : MonoBehaviour
 {
     [SerializeField] float squishDuration = 0.15f;
 
     Collider2D col;
+    Health health;
 
     // -------------------------------------------------------
     // Awake()
-    // Caches collider so we can disable it immediately on stomp.
+    // Caches collider and health, then subscribes to onDied
+    // so the squish plays exactly when health hits zero.
     // -------------------------------------------------------
     void Awake()
     {
         col = GetComponent<Collider2D>();
+        health = GetComponent<Health>();
+        health.onDied.AddListener(OnHealthDepleted);
     }
 
     // -------------------------------------------------------
     // OnCollisionEnter2D(collision)
-    // Detects stomp: player feet above enemy center.
-    // Disables collider and starts squish animation before destroy.
+    // Detects a stomp: player feet at or above enemy center.
+    // Deals 1 damage to Health — the squish happens via onDied,
+    // not directly here, so multi-HP enemies survive early stomps.
     // -------------------------------------------------------
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -28,13 +37,21 @@ public class Stompable : MonoBehaviour
         float playerFeet = collision.collider.bounds.min.y;
         float enemyCenter = col.bounds.center.y;
         if (playerFeet >= enemyCenter)
-        {
-            // Capture bounds before disabling — disabled colliders return zeroed bounds
-            float bottomY = col.bounds.min.y;
-            float halfHeight = col.bounds.extents.y;
-            col.enabled = false;
-            StartCoroutine(SquishThenDie(bottomY, halfHeight));
-        }
+            health.TakeDamage(1);
+    }
+
+    // -------------------------------------------------------
+    // OnHealthDepleted()
+    // Called by Health.onDied when HP hits zero.
+    // Disables the collider and kicks off the squish animation.
+    // -------------------------------------------------------
+    void OnHealthDepleted()
+    {
+        // Capture bounds before disabling — disabled colliders return zeroed bounds
+        float bottomY = col.bounds.min.y;
+        float halfHeight = col.bounds.extents.y;
+        col.enabled = false;
+        StartCoroutine(SquishThenDie(bottomY, halfHeight));
     }
 
     // -------------------------------------------------------

@@ -6223,6 +6223,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: 28, y: 1, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: 29, y: 1, z: 0}
     second:
       serializedVersion: 2
@@ -12657,19 +12667,19 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 844
     m_Data: {fileID: 11400000, guid: 2e37da9f4bab849ab8ac19b03024eebd, type: 2}
-  - m_RefCount: 301
+  - m_RefCount: 302
     m_Data: {fileID: 11400000, guid: efece1a2addcb431f81b1130247ef20a, type: 2}
   - m_RefCount: 33
     m_Data: {fileID: 1761571603}
   m_TileSpriteArray:
   - m_RefCount: 844
     m_Data: {fileID: 21300000, guid: cbbde4784ba974af59626be27a6ab867, type: 3}
-  - m_RefCount: 301
+  - m_RefCount: 302
     m_Data: {fileID: 21300000, guid: 7d40099b56fca486dbbfb65e2e8b8197, type: 3}
   - m_RefCount: 33
     m_Data: {fileID: 437594227}
   m_TileMatrixArray:
-  - m_RefCount: 1178
+  - m_RefCount: 1179
     m_Data:
       e00: 1
       e01: 0
@@ -12688,7 +12698,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 1145
+  - m_RefCount: 1146
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 33
     m_Data: {r: 0.90325737, g: 0.49942064, b: 0.551973, a: 1}
@@ -13058,11 +13068,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4632953003680983272, guid: a7ba09cb7ec8f4ca393b5195cf45052d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 130.2
+      value: 41.1
       objectReference: {fileID: 0}
     - target: {fileID: 4632953003680983272, guid: a7ba09cb7ec8f4ca393b5195cf45052d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 34.7
+      value: 4.4
       objectReference: {fileID: 0}
     - target: {fileID: 4632953003680983272, guid: a7ba09cb7ec8f4ca393b5195cf45052d, type: 3}
       propertyPath: m_LocalPosition.z

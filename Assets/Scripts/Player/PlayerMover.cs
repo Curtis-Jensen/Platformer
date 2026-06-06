@@ -7,6 +7,9 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float coyoteTime = 0.1f;
     [SerializeField] private float jumpCutGravityScale = 4f;
 
+    [SerializeField] private AudioSource jumpAudio;
+    [SerializeField] private float jumpPitchVariation = 0.1f;
+
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private PlayerAppearance appearance;
@@ -76,6 +79,7 @@ public class PlayerMover : MonoBehaviour
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpQueued = false;
+            jumpAudio?.PlayWithPitch(jumpPitchVariation);
             coyoteTimer = 0f;
             SetGrounded(false); // Pre-emptively unground so the coyote window can't reopen on CollisionExit
         }

@@ -7,6 +7,13 @@ public class Health : MonoBehaviour
     [Header("Health")]
     [SerializeField] private int maxHealth = 1;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hurtClip;
+    [SerializeField] private AudioClip healClip;
+    [SerializeField] private float hurtPitchVariation = 0.15f;
+    [SerializeField] private float healPitchVariation = 0.15f;
+
     [Header("Damage Flash")]
     [SerializeField] private Color flashColor = Color.red;
     [SerializeField] private float flashDuration = 0.1f;
@@ -34,6 +41,8 @@ public class Health : MonoBehaviour
         Current = Mathf.Max(0, Current - amount);
         onDamaged.Invoke();
 
+        audioSource.PlayWithPitch(hurtClip, hurtPitchVariation);
+
         if (spriteRenderer != null)
         {
             if (flashCoroutine != null) StopCoroutine(flashCoroutine);
@@ -47,6 +56,7 @@ public class Health : MonoBehaviour
     public void Heal(int amount)
     {
         Current = Mathf.Min(maxHealth, Current + amount);
+        audioSource.PlayWithPitch(healClip, healPitchVariation);
     }
 
     private IEnumerator DoFlash()

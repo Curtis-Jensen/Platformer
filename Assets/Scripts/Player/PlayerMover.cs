@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
@@ -7,10 +8,11 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float coyoteTime = 0.1f;
     [SerializeField] private float jumpCutGravityScale = 4f;
 
-    [SerializeField] private AudioSource jumpAudio;
+    [SerializeField] private AudioClip jumpClip;
     [SerializeField] private float jumpPitchVariation = 0.1f;
 
     private Rigidbody2D rb;
+    private AudioSource audioSource;
     private SpriteRenderer spriteRenderer;
     private PlayerAppearance appearance;
     private bool isGrounded;
@@ -29,7 +31,8 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     private void Start()
     {
-        rb             = GetComponent<Rigidbody2D>();
+        rb          = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         appearance     = GetComponent<PlayerAppearance>();
     }
@@ -79,7 +82,7 @@ public class PlayerMover : MonoBehaviour
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpQueued = false;
-            jumpAudio?.PlayWithPitch(jumpPitchVariation);
+            audioSource.PlayWithPitch(jumpClip, jumpPitchVariation);
             coyoteTimer = 0f;
             SetGrounded(false); // Pre-emptively unground so the coyote window can't reopen on CollisionExit
         }

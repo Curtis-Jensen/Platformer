@@ -55,6 +55,26 @@ PrefabInstance:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: f8028e56a789f405ab7eb02c1b6479e8, type: 3}
+    - target: {fileID: 4983509728504839219, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: m_Size.x
+      value: 0.7428754
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839219, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: m_Size.y
+      value: 0.37402284
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839219, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.056586396
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839219, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.037723925
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839219, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: m_Direction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4983509728504839221, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: moveSpeed
       value: 1
@@ -113,3 +133,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   invincibilityWindow: 0.5
+--- !u!114 &7371773820651935079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6561914691589573909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10d88c8af35e4f3ab8466ebfff26f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  audioSource: {fileID: 0}
+  hurtClip: {fileID: 0}
+  healClip: {fileID: 0}
+  hurtPitchVariation: 0.15
+  healPitchVariation: 0.15
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.1
+  flashCount: 2
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDied:
+    m_PersistentCalls:
+      m_Calls: []

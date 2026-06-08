@@ -239,7 +239,7 @@ MonoBehaviour:
     idleSprite: {fileID: 21300000, guid: e92ee545ebf7149298ca310cbc1c0b43, type: 3}
     jumpingSprite: {fileID: 21300000, guid: 0551f24eb0a934b69b7bf76d57408e78, type: 3}
     fallingSprite: {fileID: 21300000, guid: 7aac3306489194afeb66e0d368b739be, type: 3}
-  outfitIndex: 2
+  outfitIndex: 0
 --- !u!82 &4286363597464976101
 AudioSource:
   m_ObjectHideFlags: 0

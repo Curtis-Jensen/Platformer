@@ -26,11 +26,13 @@ public class PlayerFollower : MonoBehaviour
     [SerializeField] private float maxZoom = 12f;
 
     [Header("Bounds")]
-    [Tooltip("Clamp the camera within these world-space bounds (leave at 0 to disable)")]
-    [SerializeField] private bool useBounds = false;
+    [SerializeField] private bool useMinX = false;
     [SerializeField] private float minX = -100f;
+    [SerializeField] private bool useMaxX = false;
     [SerializeField] private float maxX = 100f;
+    [SerializeField] private bool useMinY = false;
     [SerializeField] private float minY = -100f;
+    [SerializeField] private bool useMaxY = false;
     [SerializeField] private float maxY = 100f;
 
     private Transform target;
@@ -92,11 +94,10 @@ public class PlayerFollower : MonoBehaviour
 
         Vector3 smoothed = Vector3.Lerp(transform.position, goal, smoothSpeed * Time.deltaTime);
 
-        if (useBounds)
-        {
-            smoothed.x = Mathf.Clamp(smoothed.x, minX, maxX);
-            smoothed.y = Mathf.Clamp(smoothed.y, minY, maxY);
-        }
+        if (useMinX) smoothed.x = Mathf.Max(smoothed.x, minX);
+        if (useMaxX) smoothed.x = Mathf.Min(smoothed.x, maxX);
+        if (useMinY) smoothed.y = Mathf.Max(smoothed.y, minY);
+        if (useMaxY) smoothed.y = Mathf.Min(smoothed.y, maxY);
 
         transform.position = smoothed;
     }
@@ -108,11 +109,16 @@ public class PlayerFollower : MonoBehaviour
         Gizmos.color = new Color(0f, 1f, 1f, 0.3f);
         Gizmos.DrawWireCube(transform.position, new Vector3(deadzone.x * 2f, deadzone.y * 2f, 0f));
 
-        if (useBounds)
+        bool anyBound = useMinX || useMaxX || useMinY || useMaxY;
+        if (anyBound)
         {
+            float gx0 = useMinX ? minX : transform.position.x - 50f;
+            float gx1 = useMaxX ? maxX : transform.position.x + 50f;
+            float gy0 = useMinY ? minY : transform.position.y - 50f;
+            float gy1 = useMaxY ? maxY : transform.position.y + 50f;
             Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f);
-            Vector3 center = new Vector3((minX + maxX) / 2f, (minY + maxY) / 2f, 0f);
-            Vector3 size = new Vector3(maxX - minX, maxY - minY, 0f);
+            Vector3 center = new Vector3((gx0 + gx1) / 2f, (gy0 + gy1) / 2f, 0f);
+            Vector3 size = new Vector3(gx1 - gx0, gy1 - gy0, 0f);
             Gizmos.DrawWireCube(center, size);
         }
     }

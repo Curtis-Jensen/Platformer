@@ -14485,10 +14485,10 @@ MonoBehaviour:
   tile: {fileID: 11400000, guid: efece1a2addcb431f81b1130247ef20a, type: 2}
   spawnLookahead: 20
   minGapY: 3
-  maxGapY: 5
+  maxGapY: 7
   minX: -8
   maxX: 8
-  maxHorizontalStep: 5
+  maxHorizontalStep: 8
   minWidth: 1
   maxWidth: 8
   startTileY: 10

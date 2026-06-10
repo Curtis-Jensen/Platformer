@@ -34,19 +34,24 @@ public class ProceduralClimber : MonoBehaviour
     // Platforms will never center outside this range.
     [SerializeField] private int minX = -8;
     [SerializeField] private int maxX = 8;
-    // How far (in tiles) the next platform's center can shift from the previous one.
-    // Larger values allow long horizontal leaps; smaller values keep platforms clustered.
+    // Maximum horizontal shift (tiles) when the vertical gap is at its smallest.
+    // This is the "long jump" ceiling -- a nearly-flat hop can cover this full distance.
     [SerializeField] private int maxHorizontalStep = 8;
+    // Minimum horizontal shift (tiles) allowed even when the vertical gap is at its largest.
+    // Keeps tall jumps from being perfectly straight up -- there's still a little sideways movement.
+    // Set to 0 if you want pure vertical jumps to be possible.
+    [SerializeField] private int minHorizontalStep = 1;
 
     [Header("Platform Size (tiles)")]
     // Short platforms force more precise landings; wide platforms are forgiving.
     [SerializeField] private int minWidth = 2;
     [SerializeField] private int maxWidth = 6;
 
-    [Header("Starting Y")]
-    // Tile-space Y row where the first platform is placed.
-    // Should be just above the ground so the player has somewhere to jump immediately.
-    [SerializeField] private int startTileY = 2;
+    [Header("Starting Platform")]
+    // Tile-space position where the first platform is placed.
+    // X sets the center of the first platform; Y sets its row.
+    // All subsequent platforms step outward from this anchor.
+    [SerializeField] private Vector2Int startTile = new Vector2Int(0, 2);
 
     // ========================
     // PRIVATE STATE
@@ -81,9 +86,10 @@ public class ProceduralClimber : MonoBehaviour
         tilemap = FindObjectOfType<Tilemap>();
         player = FindObjectOfType<PlayerMover>().transform;
 
-        // Seed the first platform center randomly so each run looks different.
-        prevCenterX = Random.Range(minX, maxX + 1);
-        nextTileY = startTileY;
+        // Anchor the first platform at the fixed start position.
+        // Subsequent platforms step randomly from here.
+        prevCenterX = startTile.x;
+        nextTileY = startTile.y;
     }
 
     // -------------------------------------------------------
@@ -113,10 +119,10 @@ public class ProceduralClimber : MonoBehaviour
     // nextTileY by a random vertical gap so the following call
     // lands higher up.
     //
-    // Platform center X is constrained to shift no more than
-    // maxHorizontalStep tiles from the previous platform, then
-    // clamped to [minX, maxX]. This keeps the path connected
-    // while still allowing dramatic diagonal leaps.
+    // Vertical gap and horizontal step share a "jump budget":
+    // the taller the gap, the smaller the allowed horizontal shift,
+    // and vice versa. This prevents any single jump from being
+    // both high AND long, which could make it physically impossible.
     //
     // The platform is painted tile-by-tile from left to right.
     // -------------------------------------------------------
@@ -124,9 +130,20 @@ public class ProceduralClimber : MonoBehaviour
     {
         int width = Random.Range(minWidth, maxWidth + 1);
 
+        // Pick the vertical gap first -- this drives the horizontal budget.
+        int gapY = Random.Range(minGapY, maxGapY + 1);
+
+        // Normalize gapY to 0-1 within its possible range.
+        // 0 = smallest gap (cheapest vertical spend), 1 = tallest gap (full vertical budget used).
+        float verticalFraction = (float)(gapY - minGapY) / (maxGapY - minGapY);
+
+        // Lerp the allowed horizontal step inversely: tall gap → small step, short gap → large step.
+        // This is the "jump budget" tradeoff -- high OR long, not both.
+        int allowedHorizontalStep = Mathf.RoundToInt(Mathf.Lerp(maxHorizontalStep, minHorizontalStep, verticalFraction));
+
         // cx = center X tile of the new platform.
-        // Steps randomly from the last platform's center, then clamps to the valid range.
-        int cx = Mathf.Clamp(prevCenterX + Random.Range(-maxHorizontalStep, maxHorizontalStep + 1), minX, maxX);
+        // Steps randomly within the budget from the last platform's center, then clamps to the valid range.
+        int cx = Mathf.Clamp(prevCenterX + Random.Range(-allowedHorizontalStep, allowedHorizontalStep + 1), minX, maxX);
 
         // Derive left/right edges from the center.
         // Integer division means odd widths round left (e.g. width=3 → left is 1 tile left of center).
@@ -139,8 +156,8 @@ public class ProceduralClimber : MonoBehaviour
         // Remember this center so the next platform steps from it.
         prevCenterX = cx;
 
-        // Advance the frontier by a random vertical gap.
-        nextTileY += Random.Range(minGapY, maxGapY + 1);
+        // Advance the frontier by the gap we already committed to above.
+        nextTileY += gapY;
     }
 
     // ========================

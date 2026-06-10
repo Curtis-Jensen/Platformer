@@ -14486,9 +14486,10 @@ MonoBehaviour:
   spawnLookahead: 20
   minGapY: 3
   maxGapY: 7
-  minX: -8
-  maxX: 8
-  maxHorizontalStep: 8
+  minX: -100
+  maxX: 100
+  maxHorizontalStep: 15
+  minHorizontalStep: 1
   minWidth: 1
   maxWidth: 8
   startTileY: 10

@@ -841,6 +841,7 @@ GameObject:
   - component: {fileID: 612134459}
   - component: {fileID: 612134458}
   - component: {fileID: 612134461}
+  - component: {fileID: 612134462}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Ground
@@ -14488,11 +14489,31 @@ MonoBehaviour:
   maxGapY: 7
   minX: -100
   maxX: 100
-  maxHorizontalStep: 15
+  maxHorizontalStep: 14
   minHorizontalStep: 1
   minWidth: 1
   maxWidth: 8
-  startTileY: 10
+  startTile: {x: 0, y: 10}
+--- !u!114 &612134462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612134456}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add114ea6fb7c4c6b87576f3d88a7196, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tile: {fileID: 11400000, guid: efece1a2addcb431f81b1130247ef20a, type: 2}
+  minGapY: 3
+  maxGapY: 7
+  maxHorizontalStep: 11
+  minHorizontalStep: 1
+  sampleCount: 14
+  platformWidth: 1
+  startTile: {x: 0, y: 10}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

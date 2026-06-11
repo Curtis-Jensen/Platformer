@@ -23,24 +23,19 @@ public class DirectionFlipper : MonoBehaviour
         // Calculate movement direction
         Vector3 movementDelta = transform.position - previousPosition;
         
-        // Only process if there's significant movement
-        if (movementDelta.magnitude > movementThreshold)
+        // Only flip when horizontal movement clears the threshold
+        if (Mathf.Abs(movementDelta.x) > movementThreshold)
         {
-            // Determine if moving right or left
             bool movingRight = movementDelta.x > 0;
-            
-            // Check if direction differs from current facing direction
+
             if (movingRight && !facingRight)
-            {
                 Flip();
-            }
             else if (!movingRight && facingRight)
-            {
                 Flip();
-            }
-            
-            previousPosition = transform.position;
         }
+
+        if (movementDelta.magnitude > movementThreshold)
+            previousPosition = transform.position;
     }
 
     private void Flip()

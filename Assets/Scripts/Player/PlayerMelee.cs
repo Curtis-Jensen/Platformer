@@ -34,6 +34,19 @@ public class PlayerMelee : MonoBehaviour
     private bool facingRight = true;
 
     // -------------------------------------------------------
+    // OnDrawGizmos()
+    // Shows the four swing spawn points in the Scene view.
+    // -------------------------------------------------------
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position + new Vector3( sideOffset.x,  sideOffset.y), 0.1f); // right
+        Gizmos.DrawWireSphere(transform.position + new Vector3(-sideOffset.x,  sideOffset.y), 0.1f); // left
+        Gizmos.DrawWireSphere(transform.position + new Vector3(   upOffset.x,    upOffset.y), 0.1f); // up
+        Gizmos.DrawWireSphere(transform.position + new Vector3( downOffset.x,  downOffset.y), 0.1f); // down
+    }
+
+    // -------------------------------------------------------
     // Awake()
     // Caches PlayerActions.
     // -------------------------------------------------------

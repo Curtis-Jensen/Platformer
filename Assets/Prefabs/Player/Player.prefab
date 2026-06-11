@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 4632953003680983269}
   - component: {fileID: 4632953003300449070}
   - component: {fileID: 4286363597464976101}
+  - component: {fileID: 2883446010091297350}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -336,3 +337,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2883446010091297350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632953003680983276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9132ad9a6bcca4da4aa9f9b63d77f311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swingPrefab: {fileID: 1762082751531956090, guid: 31397a4d28d6e4e529c3020ee97ca430, type: 3}
+  sideOffset: {x: 0.6, y: 0}
+  upOffset: {x: 0, y: 0.6}
+  downOffset: {x: 0, y: -0.6}
+  attackLockDuration: 0.15
+  attackCooldown: 0.35

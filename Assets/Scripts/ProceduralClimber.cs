@@ -42,6 +42,13 @@ public class ProceduralClimber : MonoBehaviour
     // Set to 0 if you want pure vertical jumps to be possible.
     [SerializeField] private int minHorizontalStep = 1;
 
+    // Controls the shape of the height-vs-distance tradeoff curve.
+    // X axis: vertical fraction (0 = smallest gap, 1 = tallest gap).
+    // Y axis: horizontal budget multiplier (0 = no horizontal movement, 1 = full maxHorizontalStep).
+    // A straight diagonal line (default) is a linear tradeoff.
+    // Curve it to make long jumps dominate early, tall jumps dominate late, or anything in between.
+    [SerializeField] private AnimationCurve budgetCurve = AnimationCurve.Linear(0f, 1f, 1f, 0f);
+
     [Header("Platform Size (tiles)")]
     // Short platforms force more precise landings; wide platforms are forgiving.
     [SerializeField] private int minWidth = 2;
@@ -137,9 +144,12 @@ public class ProceduralClimber : MonoBehaviour
         // 0 = smallest gap (cheapest vertical spend), 1 = tallest gap (full vertical budget used).
         float verticalFraction = (float)(gapY - minGapY) / (maxGapY - minGapY);
 
-        // Lerp the allowed horizontal step inversely: tall gap → small step, short gap → large step.
-        // This is the "jump budget" tradeoff -- high OR long, not both.
-        int allowedHorizontalStep = Mathf.RoundToInt(Mathf.Lerp(maxHorizontalStep, minHorizontalStep, verticalFraction));
+        // Sample the budget curve at this vertical fraction to get the horizontal multiplier (0-1).
+        // The curve shape controls how the tradeoff plays out -- edit it in the Inspector.
+        float horizontalMultiplier = Mathf.Clamp01(budgetCurve.Evaluate(verticalFraction));
+
+        // Scale between minHorizontalStep and maxHorizontalStep using the curve's output.
+        int allowedHorizontalStep = Mathf.RoundToInt(Mathf.Lerp(minHorizontalStep, maxHorizontalStep, horizontalMultiplier));
 
         // cx = center X tile of the new platform.
         // Steps randomly within the budget from the last platform's center, then clamps to the valid range.

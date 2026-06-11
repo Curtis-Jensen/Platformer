@@ -141,10 +141,13 @@ MonoBehaviour:
   zoomSpeed: 2
   minZoom: 3
   maxZoom: 12
-  useBounds: 1
+  useMinX: 1
   minX: -100
+  useMaxX: 1
   maxX: 100
+  useMinY: 1
   minY: -100
+  useMaxY: 0
   maxY: 100
 --- !u!1 &3258623630671323049
 GameObject:
@@ -156,6 +159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3258623630671323048}
   - component: {fileID: 3258623630671323051}
+  - component: {fileID: 1306818499759145106}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -230,3 +234,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1306818499759145106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3258623630671323049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81c27575d40af4f92b96aa37374d8332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

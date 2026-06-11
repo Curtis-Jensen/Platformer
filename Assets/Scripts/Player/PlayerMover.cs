@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(PlayerActions))]
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
@@ -7,18 +9,16 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float coyoteTime = 0.1f;
     [SerializeField] private float jumpCutGravityScale = 4f;
 
+    [SerializeField] private AudioClip jumpClip;
+    [SerializeField] private float jumpPitchVariation = 0.1f;
+
     private Rigidbody2D rb;
-    private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
     private PlayerAppearance appearance;
+    private PlayerActions actions;
     private bool isGrounded;
     private bool jumpQueued;
     private float coyoteTimer;
-
-    // Counter-based lock: multiple systems can independently lock movement
-    // without knowing about each other. Movement is blocked as long as this is > 0.
-    private int movementLockCount;
-
-    public bool IsMovementLocked => movementLockCount > 0;
 
     // -------------------------------------------------------
     // Start()
@@ -26,17 +26,16 @@ public class PlayerMover : MonoBehaviour
     // -------------------------------------------------------
     private void Start()
     {
-        rb             = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        appearance     = GetComponent<PlayerAppearance>();
+        rb          = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+        appearance  = GetComponent<PlayerAppearance>();
+        actions     = GetComponent<PlayerActions>();
     }
 
     // -------------------------------------------------------
     // Update()
     // Reads jump input and ticks the coyote timer down.
-    // Clears isGrounded only once the coyote window expires,
-    // smoothing over micro-bumps and tile seams.
-    // Jump is suppressed while movement is locked.
+    // Jump input is only accepted when Movement is unlocked.
     // -------------------------------------------------------
     private void Update()
     {
@@ -47,58 +46,40 @@ public class PlayerMover : MonoBehaviour
                 SetGrounded(false);
         }
 
-        if (!IsMovementLocked && isGrounded && Input.GetButtonDown("Jump"))
+        if (actions.CanPerform(PlayerActions.ActionType.Movement) && isGrounded && Input.GetButtonDown("Jump"))
             jumpQueued = true;
 
-        // Keep the airborne sprite in sync with vertical velocity
-        // so the jump→fall transition happens naturally at the apex.
         if (!isGrounded)
             UpdateAirborneSprite();
     }
 
     // -------------------------------------------------------
     // FixedUpdate()
-    // Applies horizontal movement and any queued jump impulse.
-    // Both are suppressed while movement is locked.
+    // When Movement is locked, skips applying horizontal input
+    // but lets existing momentum and gravity run freely --
+    // the player keeps their arc instead of stopping mid-air.
+    // When unlocked, drives horizontal velocity from input as normal.
     // -------------------------------------------------------
     private void FixedUpdate()
     {
-        if (IsMovementLocked)
+        if (actions.CanPerform(PlayerActions.ActionType.Movement))
         {
-            rb.velocity = Vector2.zero;
-            return;
+            float input = Input.GetAxisRaw("Horizontal");
+            rb.velocity = new Vector2(input * moveSpeed, rb.velocity.y);
         }
-
-        float input = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(input * moveSpeed, rb.velocity.y);
 
         if (jumpQueued)
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpQueued = false;
+            audioSource.PlayWithPitch(jumpClip, jumpPitchVariation);
             coyoteTimer = 0f;
-            SetGrounded(false); // Pre-emptively unground so the coyote window can't reopen on CollisionExit
+            SetGrounded(false);
         }
 
-        // Variable jump height: releasing the button while still rising cranks up gravity
-        // so a tap produces a short hop and a full hold produces the full arc.
+        // Variable jump height: releasing Jump while rising cranks gravity so
+        // a tap produces a short hop and a full hold gives the full arc.
         rb.gravityScale = (rb.velocity.y > 0f && !Input.GetButton("Jump")) ? jumpCutGravityScale : 1f;
-    }
-
-    // -------------------------------------------------------
-    // LockMovement() / UnlockMovement()
-    // Increment or decrement the lock counter. Any system that
-    // locks movement is responsible for unlocking it when done.
-    // Movement stays locked until all locks are released.
-    // -------------------------------------------------------
-    public void LockMovement()
-    {
-        movementLockCount++;
-    }
-
-    public void UnlockMovement()
-    {
-        movementLockCount = Mathf.Max(0, movementLockCount - 1);
     }
 
     // -------------------------------------------------------
@@ -111,14 +92,12 @@ public class PlayerMover : MonoBehaviour
         isGrounded = grounded;
         if (grounded)
             appearance?.SetSprite(appearance.IdleSprite);
-        // When becoming airborne, UpdateAirborneSprite in Update takes over.
     }
 
     // -------------------------------------------------------
     // UpdateAirborneSprite()
     // Picks jumping or falling sprite each frame based on
-    // vertical velocity, so the transition happens naturally
-    // at the arc's apex.
+    // vertical velocity so the transition happens naturally at the apex.
     // -------------------------------------------------------
     private void UpdateAirborneSprite()
     {

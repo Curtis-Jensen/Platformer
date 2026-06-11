@@ -39,7 +39,7 @@ public class Chair : Interactable
     private void SeatPlayer(PlayerMover player)
     {
         isSeatOccupied = true;
-        player.LockMovement();
+        player.GetComponent<PlayerActions>().Lock(PlayerActions.ActionType.Movement);
 
         // Snap player's x to the chair's x, keep their current y.
         Vector3 pos = player.transform.position;
@@ -63,7 +63,7 @@ public class Chair : Interactable
     private void StandPlayerUp(PlayerMover player)
     {
         isSeatOccupied = false;
-        player.UnlockMovement();
+        player.GetComponent<PlayerActions>().Unlock(PlayerActions.ActionType.Movement);
 
         if (playerSprite != null && playerIdleSprite != null)
         {

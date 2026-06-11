@@ -1,17 +1,21 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class BouncePad : MonoBehaviour
 {
     [SerializeField] float bounceForce = 20f;
     [SerializeField] float squishDuration = 0.15f;
     [SerializeField] Vector2 squishScale = new Vector2(1.4f, 0.6f);
+    [SerializeField] float pitchVariation = 0.15f;
 
     Vector3 restScale;
     float squishTimer;
+    AudioSource bounceAudio;
 
     void Start()
     {
         restScale = transform.localScale;
+        bounceAudio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -41,5 +45,6 @@ public class BouncePad : MonoBehaviour
 
         rb.velocity = new Vector2(rb.velocity.x, bounceForce);
         squishTimer = squishDuration;
+        bounceAudio?.PlayWithPitch(pitchVariation);
     }
 }

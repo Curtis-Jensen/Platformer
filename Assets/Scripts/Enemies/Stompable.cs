@@ -5,7 +5,7 @@ using UnityEngine;
 // Stomping deals 1 damage; the squish plays only when Health reaches zero.
 // This means multi-HP enemies take the damage flash on early stomps and squish on the last.
 [RequireComponent(typeof(Health))]
-public class Stompable : MonoBehaviour
+public class Stompable : Bouncy
 {
     [SerializeField] float squishDuration = 0.15f;
 
@@ -37,7 +37,10 @@ public class Stompable : MonoBehaviour
         float playerFeet = collision.collider.bounds.min.y;
         float enemyCenter = col.bounds.center.y;
         if (playerFeet >= enemyCenter)
+        {
+            ApplyBounce(collision.rigidbody);
             health.TakeDamage(1);
+        }
     }
 
     // -------------------------------------------------------

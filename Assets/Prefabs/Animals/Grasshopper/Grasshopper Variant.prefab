@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15ee63b63257442098d609f2dc37be2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bounceForce: 18
   squishDuration: 0.15
 --- !u!114 &5925657915504954811
 MonoBehaviour:
@@ -123,3 +124,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   invincibilityWindow: 0.5
+--- !u!114 &2470824683673251964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149155950153371537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10d88c8af35e4f3ab8466ebfff26f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  audioSource: {fileID: 0}
+  hurtClip: {fileID: 0}
+  healClip: {fileID: 0}
+  hurtPitchVariation: 0.15
+  healPitchVariation: 0.15
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.1
+  flashCount: 2
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDied:
+    m_PersistentCalls:
+      m_Calls: []

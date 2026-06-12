@@ -8,6 +8,7 @@ public class Hopper : MonoBehaviour
     [SerializeField] private float maxHopForce = 9f;
     [SerializeField] private float minHopInterval = 0.6f;
     [SerializeField] private float maxHopInterval = 1.4f;
+    [SerializeField] private float fallGravityMultiplier = 0f;
 
     [Header("Hop Sprite")]
     [SerializeField] private Sprite hoppingSprite;
@@ -15,8 +16,10 @@ public class Hopper : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Sprite idleSprite;
-    private bool isGrounded;
+    private int groundContacts;
     private float hopTimer;
+
+    private bool isGrounded => groundContacts > 0;
 
     // -------------------------------------------------------
     // Awake()
@@ -39,6 +42,12 @@ public class Hopper : MonoBehaviour
     // Counts down the hop timer. Fires a hop when grounded
     // and the timer expires, then resets to a new random interval.
     // -------------------------------------------------------
+    private void FixedUpdate()
+    {
+        if (fallGravityMultiplier > 0f && rb.velocity.y < 0f)
+            rb.AddForce(Physics2D.gravity * fallGravityMultiplier, ForceMode2D.Force);
+    }
+
     private void Update()
     {
         if (!isGrounded) return;
@@ -78,15 +87,13 @@ public class Hopper : MonoBehaviour
     // -------------------------------------------------------
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (!col.gameObject.CompareTag("Ground")) return;
-        isGrounded = true;
+        groundContacts++;
         if (spriteRenderer != null && idleSprite != null)
             spriteRenderer.sprite = idleSprite;
     }
 
     private void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Ground"))
-            isGrounded = false;
+        groundContacts = Mathf.Max(0, groundContacts - 1);
     }
 }

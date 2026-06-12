@@ -1,9 +1,8 @@
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class BouncePad : MonoBehaviour
+public class BouncePad : Bouncy
 {
-    [SerializeField] float bounceForce = 20f;
     [SerializeField] float squishDuration = 0.15f;
     [SerializeField] Vector2 squishScale = new Vector2(1.4f, 0.6f);
     [SerializeField] float pitchVariation = 0.15f;
@@ -43,7 +42,7 @@ public class BouncePad : MonoBehaviour
         float padTop = GetComponent<Collider2D>().bounds.max.y;
         if (thingBottom < padTop - 0.1f) return;
 
-        rb.velocity = new Vector2(rb.velocity.x, bounceForce);
+        ApplyBounce(rb);
         squishTimer = squishDuration;
         bounceAudio?.PlayWithPitch(pitchVariation);
     }

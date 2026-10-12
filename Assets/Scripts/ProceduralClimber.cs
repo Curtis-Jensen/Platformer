@@ -184,4 +184,22 @@ public class ProceduralClimber : MonoBehaviour
     {
         return Mathf.RoundToInt(worldUnits / tilemap.layoutGrid.cellSize.y);
     }
+
+    // -------------------------------------------------------
+    // OnDrawGizmosSelected()
+    // Draws a yellow wire cube in the Scene view at the start tile position
+    // so you can see exactly where generation will anchor without hitting Play.
+    // Only visible when this GameObject is selected in the Hierarchy.
+    // -------------------------------------------------------
+    private void OnDrawGizmosSelected()
+    {
+        Tilemap t = FindObjectOfType<Tilemap>();
+        if (t == null) return;
+
+        // Convert tile coords to world space for the gizmo.
+        Vector3 worldPos = t.GetCellCenterWorld(new Vector3Int(startTile.x, startTile.y, 0));
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(worldPos, t.layoutGrid.cellSize);
+    }
 }

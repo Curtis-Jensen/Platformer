@@ -70,6 +70,7 @@ public class ProceduralClimberHeightTester : MonoBehaviour
 
         // Paint the initial launch platform so the player has somewhere to stand.
         PaintPlatform(tilemap, currentX, currentY);
+        Debug.Log($"[HeightTester] Launch platform at ({currentX}, {currentY})");
 
         for (int i = 0; i < sampleCount; i++)
         {

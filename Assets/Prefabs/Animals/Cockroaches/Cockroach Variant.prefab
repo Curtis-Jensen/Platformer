@@ -96,6 +96,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 571985a84aa644bf385fd09904668330, type: 3}
     - target: {fileID: 4983509728504839231, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839231, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4983509728504839231, guid: 06273b519dadc4e81acfad407501bdb4, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
@@ -118,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15ee63b63257442098d609f2dc37be2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bounceForce: 18
   squishDuration: 0.15
 --- !u!114 &-1400205571259219739
 MonoBehaviour:
